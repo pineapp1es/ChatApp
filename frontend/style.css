@@ -1,0 +1,38 @@
+#users {
+    background-color: red;
+    margin: 20%;
+    display: flex;
+    flex-direction: column;
+    padding: 3%;
+}
+.user {
+    margin: 6%;
+}
+
+#chat {
+    background-color: blue;
+}
+
+#history {
+    background-color: yellow;
+    height: 50vh;
+    width: 20vw;
+    overflow-y: scroll;
+    overflow-x: wrap;
+}
+
+#input {
+    background-color: green;
+}
+
+.container {
+    align-content: center;
+    display: flex;
+}
+
+#chat {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10%;
+    /* padding: 10% */
+}

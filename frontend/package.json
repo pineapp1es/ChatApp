@@ -1,0 +1,9 @@
+{
+  "dependencies": {
+    "socket.io-client": "^4.8.1",
+    "vite": "^7.0.6"
+  },
+  "scripts" : {
+    "serve" : "vite"
+  }
+}
