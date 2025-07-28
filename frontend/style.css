@@ -9,11 +9,11 @@
     margin: 6%;
 }
 
-#chat {
+#chatDiv {
     background-color: blue;
 }
 
-#history {
+#historyDiv {
     background-color: yellow;
     height: 50vh;
     width: 20vw;
@@ -21,7 +21,7 @@
     overflow-x: wrap;
 }
 
-#input {
+#inputDiv {
     background-color: green;
 }
 
@@ -30,7 +30,7 @@
     display: flex;
 }
 
-#chat {
+#chatDiv {
     display: flex;
     flex-direction: column;
     margin-top: 10%;
