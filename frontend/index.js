@@ -1,7 +1,18 @@
 import { io } from "socket.io-client";
 
+
+// Enable Logging levels by commenting out respective level definitions
+console.debug = () => {};
+// console.log = () => {};
+// console.info = () => {};
+// console.warn = () => {};
+// console.error = () => {};
+
+
+// Temporary username
 localStorage.setItem('username', 'pineapple')
 
+// Connect to websocket - should be done while logging in
 const port = 7845;
 console.debug("Connecting to web socket...");
 const socket = io(`http://localhost:${port}`, {
@@ -11,6 +22,7 @@ const socket = io(`http://localhost:${port}`, {
 });
 console.debug("Connected!");
 
+// Object to store all the chat histories for the chat rooms visited by the user.
 let chatHistories = {};
 
 const historyDiv = document.getElementById('historyDiv');
@@ -19,38 +31,43 @@ const sendMessageForm = document.getElementById('sendMessageForm');
 const messageInput = document.getElementById('messageInput');
 
 
+let lastUpdatedMessageNum = 0;
 
+
+// Event listener for the submit button that sends the message to server
 sendMessageForm.addEventListener('submit', (e) => {
   e.preventDefault();
   sendMessage()
 });
 
 
+// Updates chatHistories object when server sends in update request
 socket.on("updateChat", (data) => updateHistoryData(data));
 
 
+// Function that handles sending the message from client to server
 function sendMessage() {
 
    // let chatRoom = selectedChatRoom
   let chatRoom = "global";
   let sender = localStorage.getItem('username');
   let message = messageInput.value;
-  let epochTime = Date.now();
+  let date = new Date();
+  let epochTime = date.getSeconds();
 
   let data = {
     roomCode : chatRoom,
-    messageData : {
-      sender : sender,
-      epochTime : epochTime,
-      message : message
-    }
+    message: message
   }
 
   console.log("Sending Message...")
   socket.emit('sendMessage', data);
+  // Set the history to be scrolled to the bottom when message sends
+  historyDiv.scrollTop = historyDiv.scrollHeight - historyDiv.clientHeight;
 }
 
 
+// Function that handles updating the chatHistories object
 function updateHistoryData(data) {
   console.debug("Recieved update request. Updating chat history data...");
   chatHistories[data['roomCode']] = data['history'];
@@ -58,64 +75,38 @@ function updateHistoryData(data) {
   chatHistories[data['roomCode']]['msgEndNum'] = data['msgEndNum'];
   console.debug("Done!\n")
 
+  // If the currently selected chat room is the one that was updated, update the visible
+  // chat
   // if (selectedChatRoom = data['roomCode']) updateChat();
   updateChat();
 }
 
 
+// Function that handles updating the chat selected and is visible on screen.
 function updateChat() {
   console.debug("Updating current chat...");
 
-  // let roomCode = selectedChatRoom;
-  let roomCode = "global";
-  // let lastUpdatedMessage = getLastUpdatedMessage;
-  let lastUpdatedMessageNum = chatHistories[roomCode]['msgStartNum'];
-  let lastMessageInHistoryNum = chatHistories[roomCode]['msgEndNum'];
-  for (let i = lastUpdatedMessageNum; i <= lastMessageInHistoryNum; i++) {
+  // checks if the user has the history scrolled to the bottom.
+  // if it is at the bottom, the chat scroll bar stays at the bottom after chat update
+  // if not, the chat stays fixed in place without scrolling to the bottom after update
+  const isScrolledToBottom = historyDiv.scrollHeight - historyDiv.clientHeight
+                             == historyDiv.scrollTop;
+
+  // const roomCode = selectedChatRoom;
+  const roomCode = "global";
+
+  if (lastUpdatedMessageNum < chatHistories[roomCode]['msgStartNum'])
+     lastUpdatedMessageNum = chatHistories[roomCode]['msgStartNum'] - 1;
+
+  const lastMessageInHistoryNum = chatHistories[roomCode]['msgEndNum'];
+  for (let i = lastUpdatedMessageNum + 1; i <= lastMessageInHistoryNum; i++) {
     historyDiv.innerHTML = historyDiv.innerHTML + chatHistories[roomCode][i.toString()] + "<br>";
   }
 
+  if (isScrolledToBottom)
+    historyDiv.scrollTop = historyDiv.scrollHeight - historyDiv.clientHeight;
+
+  lastUpdatedMessageNum = lastMessageInHistoryNum;
   console.debug("Done!\n")
+
 }
-
-
-// document.addEventListener("DOMContentLoaded", () => {
-//   let historyDiv = document.getElementById("history");
-//   historyDiv.innerHTML = "hello";
-//   socket.on("message", (msg) => {
-//       console.log("recieved: " + msg);
-//       historyDiv.innerHTML = historyDiv.innerHTML + "<br>" + msg;
-//     })
-
-//   document.getElementById("sendMessageForm").addEventListener("submit", (e) => {
-//     e.preventDefault();
-//     let msg = document.getElementById("messageInput").value;
-//     console.log("sending " + msg);
-//     let payload = {
-//       roomCode : "global",
-//       messageData : {
-//       sender : socket.id,
-//       date : Date.now(),
-//       message : msg
-//       }
-//     };
-//     console.log("payload: " + JSON.stringify(payload))
-//     socket.emit("sendMessage", payload)
-//   })
-
-//   socket.on("test", (data) => {
-//     console.log(data);
-//   })
-//     // historyDiv.innerHTML = historyDiv.innerHTML + "<br>" + "test";
-//     // console.log(historyDiv.innerHTML)
-//     // return false;
-//   socket.on("updateMessages", (data) => {
-//     historyDiv.innerHTML = "";
-//     chatHistories[data["roomCode"]] = data["messageData"];
-//     console.log(chatHistories[data["roomCode"]]);
-//     for (const msg of chatHistories[data["roomCode"]]) {
-//       historyDiv.innerHTML += msg + "<br>";
-//     }
-
-//   })
-// })
