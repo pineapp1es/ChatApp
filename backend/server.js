@@ -3,17 +3,23 @@ const sio = require('socket.io');
 const { createServer } = require('node:http')
 const mongodb = require('mongodb')
 const cors = require('cors');
-const { stringify } = require('node:querystring');
+const cookieParser = require('cookie-parser');
+const cookie = require('cookie');
+const bcrypt = require('bcrypt');
+const { randomBytes } = require('node:crypto');
 require('dotenv').config()
 
+const cookieMaxAge = 1000*60*60*24*365*10;
 
 // Enable Logging levels by commenting out respective level definitions
-console.debug = () => {};
+// console.debug = () => {};
 // console.log = () => {};
 // console.info = () => {};
 // console.warn = () => {};
 // console.error = () => {};
 
+// salt rounds for bcrypt
+const saltRounds = 10;
 
 // Connect to MongoDB Atlas
 const uri = process.env.URI;
@@ -25,9 +31,17 @@ const userInfo = db.collection("userInfo");
 
 // Create server and websocket
 const app = express()
-const port = 7845
+app.use(cookieParser());
+app.use(cors({
+  origin: ["http://localhost:5173"],
+  credentials : true
+}));
+app.use(express.json());
+const port1 = 7845
+const port2 = 7846
 const server = createServer(app)
 const io = new sio.Server(server, {
+  cookie: true,
   cors: {
     origin: ["http://localhost:5173"],
     credentials: true,
@@ -39,69 +53,199 @@ const io = new sio.Server(server, {
 let socketUsers = {};
 
 
+// Integer -> String
+// produce a random secure string of the consumed length for cookie token
+function generateToken(l=56) {
+  return Buffer.from(randomBytes(l)).toString('hex');
+}
+
+
+app.post("/autoCookieLogin", async (req, res) => {
+  const cookies = req.cookies;
+  const sessionID = cookies.sessionID;
+
+  const session = await sessions.findOne({
+    _id : sessionID
+  })
+
+  if (!session) {
+    res.clearCookie('sessionID');
+    res.json({success : false});
+  }
+  else {
+    const cookieExpireTime = new Date(0);
+    cookieExpireTime.setUTCMilliseconds(Date.now() + cookieMaxAge);
+    res.cookie("sessionID", sessionID, {maxAge : cookieMaxAge, httpOnly: true});
+    try {
+      await sessions.insertOne({
+        _id : sessionID,
+        username : session.username,
+        expiresAt : cookieExpireTime
+      })
+    }
+    catch (e) {
+      console.error("[ERROR] " + "An error has occurred in saving session id:\n" + e);
+    }
+    res.json({success : true});
+  }
+});
+
+// Check if the username exists in DB. If it does, compare the hashed password and sent password.
+// If the credentials are valid, create a session cookie, store it and set it and send back a true value
+// If credentials are invalid, send back a false value
+app.post("/login", async (req, res) => {
+  const payload = req.body;
+  const userCreds = await userInfo.findOne({
+    username: payload['username'],
+  });
+
+  if (!userCreds) {
+    res.json({success : false});
+  }
+  else if (await bcrypt.compare(payload.password, userCreds.password)) {
+    const sessionID = generateToken();
+
+
+    const cookieOptions = {
+      httpOnly : true
+    };
+    const cookieExpireTime = new Date(0);
+    if (payload.rememberMe) {
+      cookieExpireTime.setUTCMilliseconds(Date.now() + cookieMaxAge);
+      cookieOptions.maxAge = cookieMaxAge;
+    }
+    else {
+      cookieExpireTime.setUTCMilliseconds(Date.now() + 1000*60*60*12);
+    }
+    try {
+      await sessions.insertOne({
+        _id : sessionID,
+        username : payload['username'],
+        expiresAt : cookieExpireTime
+      })
+    }
+    catch (e) {
+      console.error("[ERROR] " + "An error has occurred in saving session id:\n" + e);
+    }
+    res.cookie('sessionID', sessionID, cookieOptions);
+
+    res.json({success : true});
+
+  }
+  else
+    res.json({success : false});
+})
+
+
+
+app.post("/signup", async (req, res) => {
+  const payload = req.body;
+
+  const username = payload.username;
+  const hashedPassword = await bcrypt.hash(payload.password, saltRounds);
+
+  const existing = await userInfo.findOne({username : username});
+
+  if (!existing) {
+    try {
+      await userInfo.insertOne({
+        username: username,
+        password: hashedPassword
+      });
+    }
+    catch (e) {
+      console.error("[ERROR] " + "Error occurred while storing new user data:\n" + e);
+    }
+
+    res.json({success : true, alreadyExists : false});
+  }
+  else {
+    res.json({success : false, alreadyExists : true});
+  }
+
+})
+
+
+app.post("/logout", async (req, res) => {
+  const cookies = req.cookies;
+  res.clearCookie('sessionID');
+  await sessions.deleteOne({
+    _id : cookies.sessionID
+  });
+
+  res.json({success : true});
+})
+
+
 // When a user logs in and connects to the websocket
 io.on('connection', async (socket) => {
 
-  console.info("[INFO] " + "New Connection: Hello, " + socket.handshake.headers['username'] + "!\n");
+  console.debug("[DEBUG] " + "Validating session id...")
+  if (!socket.handshake.headers.cookie) {
+    socket.disconnect(true);
+    return;
+  }
+  const cookies = cookie.parse(socket.handshake.headers.cookie)
+  if (!cookies.sessionID) {
+    socket.emit('noSession');
+    socket.disconnect(true);
+    return;
+  }
 
-  console.debug("[DEBUG] " + "Creating new logged in session for the user...");
-  await addUserToSession(socket);
-  console.debug("[DEBUG] " + "Done!\n");
+  if (!validSession(cookies.sessionID)) {
+    socket.disconnect(true);
+    return;
+  }
+  console.debug("[DEBUG] " + "Validated!");
+
+  console.debug("[DEBUG] " + "New Connection, Cookies : " + socket.handshake.headers.cookie + "\n");
+
 
   console.debug("[DEBUG] " + "Adding user to their rooms...")
   await addClientToRooms(socket);
   console.debug("[DEBUG] " + "Done!\n")
 
   console.debug("[DEBUG] " + "Updating new connection's global chat...");
-  await initializeClientGlobalChat(socket);
+  // await initializeClientGlobalChat(socket);
+  await updateClientMessages("global", socket);
   console.debug("[DEBUG] " + "Done!\n")
 
-  socket.on("sendMessage", async (data) => await sendMessage(data, socket.id));
+  socket.on("sendMessage", async (data) => await sendMessage(data, cookies.sessionID));
   // socket.on("createRoom", async(data) => await createRoom(data));
   // socket.on("leaveRoom", async(data) => await leaveRoom(data));
   // socket.on("deleteRoom", async(data) => await deleteRoom(data));
-  socket.on('disconnect', async (reason) => await handleSocketDisconnection(socket, reason));
 
 })
 
 
-// Updates the global chat history on client side when the user logs in
-async function initializeClientGlobalChat(socket) {
-  let chatRoom = await chatRooms.findOne({roomCode : "global"});
-  let result = formatMessages(chatRoom);
+// String (sessionID) -> Boolean
+// produces true if the sessionID exists in the sessions collection in DB
+async function validSession(sessionID) {
+  try {
+    const result = await sessions.findOne({
+      _id : sessionID
+    })
 
-  let data = {
-    roomCode : chatRoom['roomCode'],
-    msgStartNum : result[1],
-    msgEndNum : result[2],
-    history : result[0]
+    if (!result)
+      return false;
+
+    return true;
   }
-
-  socket.emit("updateChat", data);
-
-}
-
-
-// Adds user to loggedInSessions collection and in the socketUsers object
-async function addUserToSession(socket) {
-
-  let username = socket.handshake.headers['username'];
-  let result = await sessions.insertOne({
-    _id : socket.id,
-    username : username
-  })
-
-  socketUsers[socket.id] = username;
+  catch (e) {
+    console.error("[ERROR] " + "INVALID SESSION ID : " + sessionID);
+  }
 }
 
 
 // Gets username from socketUsers or the DB
-async function getUsername(socketid) {
-  if (socketUsers.hasOwnProperty(socketid))
-    return socketUsers[socketid];
+async function getUsername(sessionID) {
+  if (socketUsers.hasOwnProperty(sessionID))
+    return socketUsers[sessionID];
   else {
-    let username = await sessions.findOne({_id : socketid});
-    return username;
+    let data = await sessions.findOne({_id : sessionID});
+    console.log(sessionID);
+    console.log(data);
+    return data.username;
   }
 }
 
@@ -109,15 +253,6 @@ async function getUsername(socketid) {
 // Get all chat rooms the user is in from MongoDB and add them to it in socket rooms
 async function addClientToRooms(socket) {
   socket.join("global");
-}
-
-
-// When a user disconnects, their session entry in the DB is deleted by this function
-async function handleSocketDisconnection(socket, reason) {
-  console.log("[INFO] " + "Disconnecting socket [" + socket.id + "]...");
-  console.debug("[DEBUG] " + "Reason : " + JSON.stringify(reason))
-  let result = await sessions.deleteOne({_id : socket.id});
-  console.debug("[DEBUG] " + "Disconnected. \n");
 }
 
 
@@ -132,7 +267,7 @@ async function sendMessage(data, id) {
   let sender = await getUsername(id);
   // If username related to socket id wasnt found, the message is not sent.
   if (sender == null) {
-    console.error("ERROR!! Socket " + id + " doesnt exist. Not sending the message...")
+    console.error("[ERROR] " + "Session " + id + " doesnt exist. Not sending the message...")
     console.debug("[DEBUG] " + JSON.stringify(socketUsers));
     return;
   }
@@ -160,13 +295,18 @@ async function sendMessage(data, id) {
   console.debug("[DEBUG] " + "Updated!\n");
 
   // After updating DB, start updation of clients chat histories
-  updateClientMessages(chatRoom);
+  await updateClientMessages(chatRoom);
 }
 
 
 // Function that creates readable chats and sends them to clients for updation
-function updateClientMessages (chatRoom) {
+async function updateClientMessages (chatRoom, socket=null) {
 
+  if (typeof chatRoom === 'string') {
+    chatRoom = await chatRooms.findOne({
+      roomCode : chatRoom
+    })
+  }
   // set end to the final message number
   let end = chatRoom['data']['messageCount'];
   // set start to 50th message from the end
@@ -181,10 +321,15 @@ function updateClientMessages (chatRoom) {
     history : result[0]
   }
 
-  console.debug("[DEBUG] " + "Sending updated data to all room members...\n")
-  io.to(chatRoom['roomCode']).emit("updateChat", data);
+  if (!socket) {
+    console.debug("[DEBUG] " + "Sending updated data to all room members...\n");
+    io.to(chatRoom['roomCode']).emit("updateChat", data);
+  }
+  else {
+    console.debug("[DEBUG] " + "Sending updated data to requested room member");
+    socket.emit('updateChat', data);
+  }
 }
-
 
 
 // Converts stored JSON message data into formatted, more readable strings for HTML
@@ -212,10 +357,10 @@ function formatMessages(chatRoom, start=-1, end=-1) {
     chatHistory[i.toString()] = msgFormattedStringHTML;
   }
 
-  console.debug("[DEBUG] " + "Done!\n")
+  console.debug("[DEBUG] " + "Done!")
   return [chatHistory, start, end];
 }
 
 
-
-server.listen(port, () => console.log("[INFO] " + `Server listening to http://localhost:${port}`));
+app.listen(port2, () => console.info("[INFO] " + `Express server listening to http://localhost:${port2}`))
+server.listen(port1, () => console.log("[INFO] " + `WebSocket listening to http://localhost:${port1}`));
