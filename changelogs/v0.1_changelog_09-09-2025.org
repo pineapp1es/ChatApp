@@ -9,3 +9,4 @@
 - changed to use only http response codes and no json response where possible
 - better logging
 - better error handling (i think)
+- edited the bare bones frontend to work with the new backend
