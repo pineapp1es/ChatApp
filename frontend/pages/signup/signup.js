@@ -44,9 +44,9 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     method: "POST",
     headers: header,
     body: JSON.stringify(payload)
-  }).then(response => response.json());
+  });
 
-  if (signup.success) {
+  if (signup.ok) {
     statusLabel.innerHTML = "Successfully signed up!"
 
     const validate = await fetch(backendBaseURI + "/login", {
@@ -54,11 +54,14 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
       headers: header,
       credentials: 'include',
       body: JSON.stringify(payload)
-    }).then(response => response.json());
-    console.log(document.cookie);
-    if (validate.success) {
+    });
+
+    if (validate.ok) {
       window.location.href = "./../chat/chat.html";
     }
+  }
+  else if (signup.status == 400) {
+    statusLabel.innerHTML = "User with that username already exists. Please try a different username."
   }
   else {
     statusLabel.innerHTML = "Something went wrong.. Try again."

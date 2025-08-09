@@ -1,0 +1,11 @@
+#+title: Changelog v0.1
+#+Date: 09-09-2025
+
+- Completely rewritten backend code (all code is no longer in a single file).
+- follows a 3 layer architecture with contnrollers, services and models (basically the MVC architecture without the view layer)
+- switched to typescript from javascript
+- code is much more readable and navigable
+- switched from mongodb js driver to mongoose
+- changed to use only http response codes and no json response where possible
+- better logging
+- better error handling (i think)

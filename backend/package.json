@@ -1,15 +1,25 @@
 {
-  "dependencies": {
-    "bcrypt": "^6.0.0",
-    "cookie": "^1.0.2",
-    "cookie-parser": "^1.4.7",
-    "dotenv": "^17.2.1",
-    "express": "^5.1.0",
-    "mongodb": "^6.18.0",
-    "nodemon": "^3.1.10",
-    "socket.io": "^4.8.1"
-  },
-  "scripts": {
-    "dev": "nodemon server.js"
-  }
+    "dependencies": {
+        "@tsconfig/node20": "^20.1.6",
+        "@types/bcrypt": "^6.0.0",
+        "@types/cookie-parser": "^1.4.9",
+        "@types/express": "^5.0.3",
+        "@types/module-alias": "^2.0.4",
+        "@types/node": "^24.2.0",
+        "bcrypt": "^6.0.0",
+        "bcrypt-ts": "^7.1.0",
+        "cookie": "^1.0.2",
+        "cookie-parser": "^1.4.7",
+        "dotenv": "^17.2.1",
+        "express": "^5.1.0",
+        "mongoose": "^8.17.0",
+        "nodemon": "^3.1.10",
+        "socket.io": "^4.8.1",
+        "tsx": "^4.20.3",
+        "typescript": "^5.9.2"
+    },
+    "scripts": {
+        "dev": "nodemon --watc \"src/**\" --ext \"ts\" --exec \"npx tsx src/app.ts\""
+    },
+    "type": "module"
 }

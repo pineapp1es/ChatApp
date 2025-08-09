@@ -1,0 +1,7 @@
+# MAKE A FILE NAMED '.env' IN ROOT DIRECTORY WITH THE FOLLOWING FIELDS
+
+MONGODB_CLUSTER_CONNECTION_STRING='<mongodb connection string to the cluster with chatapp database>'
+CHATAPP_DB_NAME='<name of the database in the cluster with required collections>'
+SESSIONS_COLL_NAME='<name of collection in database with session data>'
+CHATROOMS_COLL_NAME='<name of collection in database with chat rooms data>'
+USERINFO_COLL_NAME='<name of collection in database with user info data>'

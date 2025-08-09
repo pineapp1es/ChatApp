@@ -1,12 +1,12 @@
 const backendBaseURI = "http://localhost:7846"
 const header = { "content-type": "application/json" }
 
-const autoLogin = await fetch(backendBaseURI + "/autoCookieLogin", {
+const autoLogin = await fetch(backendBaseURI + "/cookieLogin", {
   method: "POST",
   headers: header,
   credentials: 'include',
-}).then(response => response.json());
-if (autoLogin.success) {
+});
+if (autoLogin.ok) {
   window.location.href = "./pages/chat/chat.html";
 }
 else {

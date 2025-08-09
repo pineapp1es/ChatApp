@@ -22,7 +22,7 @@ document.getElementById("loginForm").addEventListener('submit', async (e) => {
   const payload = {
     username : username,
     password : password,
-    rememberMe : rememberMeVal
+    rememberSession : rememberMeVal
   }
 
   const validate = await fetch(backendBaseURI +  "/login", {
@@ -30,9 +30,9 @@ document.getElementById("loginForm").addEventListener('submit', async (e) => {
     headers: header,
     credentials: 'include',
     body : JSON.stringify(payload)
-  }).then(response => response.json());
-  console.log(document.cookie);
-  if (validate.success) {
+  });
+
+  if (validate.ok) {
     statusLabel.innerHTML = "Successfully logged in!"
     window.location.href = "./../chat/chat.html";
   }

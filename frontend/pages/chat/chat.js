@@ -2,9 +2,8 @@ import { io } from "socket.io-client";
 const backendBaseURI = "http://localhost:7846"
 const header = { "content-type": "application/json"}
 
-console.log(document.cookie);
 // Enable Logging levels by commenting out respective level definitions
-// console.debug = () => {};
+console.debug = () => {};
 // console.log = () => {};
 // console.info = () => {};
 // console.warn = () => {};
@@ -67,8 +66,9 @@ function sendMessage() {
   let message = messageInput.value;
 
   let data = {
-    roomCode : chatRoom,
-    message: message
+    roomToSendTo: chatRoom,
+    content: message,
+    messageType: 'text'
   }
 
   console.log("Sending Message...")
@@ -82,8 +82,8 @@ function sendMessage() {
 function updateHistoryData(data) {
   console.debug("Recieved update request. Updating chat history data...");
   chatHistories[data['roomCode']] = data['history'];
-  chatHistories[data['roomCode']]['msgStartNum'] = data['msgStartNum'];
-  chatHistories[data['roomCode']]['msgEndNum'] = data['msgEndNum'];
+  chatHistories[data['roomCode']]['msgStartNum'] = data.numOfFirstLoadedMessage;
+  chatHistories[data['roomCode']]['msgEndNum'] = data.numOfLastLoadedMessage;
   console.debug("Done!\n")
 
   // If the currently selected chat room is the one that was updated, update the visible

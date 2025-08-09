@@ -1,0 +1,27 @@
+{
+  "extends": "@tsconfig/node20/tsconfig.json",
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "_version": "20.1.0",
+
+  "compilerOptions": {
+    "lib": ["es2023"],
+    "module": "nodenext",
+    "target": "es2022",
+    "allowImportingTsExtensions" : true,
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node16",
+    "paths": {
+        "@root/*": ["./*"],
+        "@src/*": ["./src/*"],
+        "@config/*": ["./src/config/*"],
+        "@utils/*": ["./src/utils/*"],
+        "@models/*": ["./src/models/*"],
+        "@routes/*": ["./src/routes/*"],
+        "@controllers/*": ["./src/controllers/*"],
+        "@services/*": ["./src/services/*"]
+    }
+  },
+  "esModuleInterop": true,
+}
