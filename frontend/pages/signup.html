@@ -1,0 +1,59 @@
+<!doctype html>
+<html class="no-js" lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="x-ua-compatible" content="ie=edge">
+        <title>Sign up for ChatApp</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="../styles/loginAndSignupStyles.css">
+
+    </head>
+    <body>
+        <div class="container">
+            <div id="splashContainer">
+                <div>
+                    <label id="welcomeSplashLabel">Welcome to</label>
+                    <div class="headingBox"><label id="chatAppLabel">ChatApp</label></div>
+                    <div class="headingBox-shadow"></div>
+                </div>
+            </div>
+
+            <div id="formContainer">
+                <div id="formBackgroundBox">
+                    <label id="formHeading">sign up</label>
+                    <div id="formBox">
+                        <form id="loginForm">
+
+                            <div id="usernameInputContainer">
+                                <label id="usernameInputLabel" for="usernameInput">Username</label><br>
+                                <input id="usernameInput" type="text" placeholder="Enter your username..." required><br>
+                            </div>
+
+                            <div id="passwordInputContainer">
+                                <label id="passInputLabel" for="passInput">Password</label><br>
+                                <input id="passInput" type="password" placeholder="Enter your password..." required><br>
+                            </div>
+                            <div id="confirmPassInputContainer">
+                                <label id="confirmPassInputLabel" for="confirmPassInput">Confirm Password</label>
+                                <input id="confirmPassInput" type="password" placeholder="Re-enter password..." required>
+                            </div>
+
+                            <div id="showPasswordContainer">
+                                <input type="checkbox" id="showPasswordBox">
+                                <label for='showPasswordBox'>Show Password</label><br>
+                            </div>
+
+                            <button id="loginButton" type="submit">Sign up!</button><br>
+
+                            <label id="statusLabel"></label>
+                            <a id="signUpOrLogInSuggestion" href='./../signup/signup.html'>Dont have an account?<br>Sign up!</a>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script type="module" src="../scripts/login.js"></script>
+    </body>
+</html>

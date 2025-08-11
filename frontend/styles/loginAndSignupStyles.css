@@ -1,0 +1,341 @@
+@font-face {
+    font-family: Pixelify-Sans;
+    src: url(../fonts/PixelifySans-Medium.ttf);
+}
+@font-face {
+    font-family: JetBrains Mono-Medium;
+    src: url(../fonts/JetBrainsMono-Medium.ttf);
+}
+@font-face {
+    font-family: JetBrains Mono-Medium-Italic;
+    src: url(../fonts/JetBrainsMono-MediumItalic.ttf);
+}
+@font-face {
+    font-family: Unifont;
+    src: url(../fonts/unifont-16.0.04.otf);
+}
+
+body {
+    background-color: #FFFDEA;
+    color: #6C4B04;
+    font-family: JetBrains Mono-Medium;
+}
+
+.container {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+#splashContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+#formContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+.headingBox {
+    background-color: #96E8FF;
+    z-index: 2;
+    align-items: center;
+    text-align: center;
+}
+
+.headingBox-shadow {
+    background-color: #85CEE2;
+    z-index: 1;
+}
+
+#welcomeSplashLabel {
+    font-family: JetBrains Mono-Medium-Italic;
+}
+
+#chatAppLabel {
+    font-family: Pixelify-Sans;
+    color: #666666;
+}
+
+#formBackgroundBox {
+    background-color: #EAE7D8;
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    border-radius: 8px;
+}
+
+#formHeading {
+    position: relative;
+    z-index: 1;
+}
+
+#formBox {
+    z-index: 2;
+    background-color: #FFFDEA;
+    align-items: center;
+    font-family: Unifont;
+    border-radius: 8px;
+}
+
+input[type=text], input[type=password] {
+    align-self: center;
+    margin-left: 3.58%;
+}
+
+#usernameInputContainer {
+    margin-top: 0.5em;
+    padding: 2%;
+}
+#usernameInputLabel {
+    margin-left: 4%;
+    margin-top: 0.5em;
+}
+#usernameInput {
+    margin-top: 0.5em;
+}
+
+
+#passwordInputContainer, #confirmPassInputContainer {
+    margin-top: 0.5em;
+    padding: 2%;
+}
+#passInputLabel, #confirmPassInputLabel {
+    margin-left: 4%;
+    margin-top: 0.5em;
+}
+#passInput, #confirmPassInput{
+    margin-top: 0.5em;
+}
+
+#showPasswordContainer {
+    margin-left: 4%;
+    margin-top: 0.5rem;
+    padding: 2%;
+}
+#rememberMeContainer {
+    margin-left: 4%;
+    margin-top: 0.1rem;
+    padding: 2%;
+    font-size: 1.2vw;
+}
+
+#loginButton {
+    margin-top: 0.5em;
+    margin-left: 5.33%;
+    padding: 2%;
+    align-self: center;
+    color: white;
+    background-color: black;
+    margin-bottom: 0.7em;
+    transition-duration: 0.2s;
+    border-radius: 8px;
+}
+#loginButton:hover {
+    color: #85CEE2;
+    transition-duration: 0.2s;
+    background-color: #2A2A2A;
+}
+
+#signUpOrLogInSuggestion {
+    color: black;
+    margin-bottom: 5%;
+    width: 100%;
+    display: inline-block;
+    text-align: center;
+}
+
+@media screen and (max-width: 75vh) {
+    .container {
+        flex-direction: column;
+    }
+
+    #splashContainer {
+        align-self: center;
+        height: 30vh;
+        width: 100vw;
+    }
+
+    #formContainer {
+        align-self: center;
+        margin-top: 10%;
+        height: 70vh;
+        width: 100vw;
+    }
+
+    .headingBox {
+        position: absolute;
+        margin-left: calc((100vw - 75vw)/2);
+        height: 2.2em;
+        width: 75vw;
+        line-height: 2.2em;
+        font-size: 10vw;
+    }
+
+    .headingBox-shadow {
+        position: absolute;
+        margin-top: calc(0vh + 1.5%);
+        margin-left: calc((100vw - 75vw)/2 + 1.5%);
+        height: 2.2em;
+        width: 75vw;
+        font-size: 10vw;
+    }
+
+    #welcomeSplashLabel {
+        margin-left: 23vw;
+        font-size: 9.5vw;
+    }
+
+    #chatAppLabel {
+        font-size: 11vw;
+    }
+
+    #formBackgroundBox {
+        position: absolute;
+        width: 70.6vw;
+        margin-top: 10% ;
+        margin-left: calc((100vw - 70.6vw)/2);
+        margin-bottom: 10%;
+        font-size: 7.25vw;
+    }
+
+    #formHeading {
+        margin-top: 7%;
+        font-size: 8.25vw;
+    }
+
+    #formBox {
+        font-size: 4.5vw;
+        margin-top: 5.28%;
+        margin-bottom: 7.22%;
+        width: 85%;
+    }
+
+    input[type=text], input[type=password] {
+        height: 1.5em;
+        width: 89.33%;
+        font-size: 3vw;
+    }
+
+
+    #showPasswordContainer {
+        font-size: 3vw;
+    }
+    #rememberMeContainer {
+        font-size: 3vw;
+    }
+
+    #loginButton {
+        width: 89.33%;
+        height: 17.52%;
+        font-size: 2.5vw;
+        margin-bottom: 7%;
+    }
+
+    input[type=checkbox] {
+        width: 3vw;
+        height: 3vw;
+    }
+
+    #signUpOrLogInSuggestion {
+        font-size: 3vw;
+        justify-self: center;
+    }
+
+}
+
+@media screen and (min-width: 75.01vh) {
+
+    .container {
+        flex-direction: row;
+    }
+
+    #splashContainer {
+        width: 66%;
+        height: 100%;
+    }
+
+    #formContainer {
+        width: 33%;
+        height: 100%;
+    }
+
+    .headingBox {
+        position: absolute;
+        margin-top: 40.74vh;
+        margin-left: 5.99vw;
+        height: 2.2em;
+        width: 50.73%;
+        line-height: 2.2em;
+        font-size: 8vw;
+    }
+
+    .headingBox-shadow {
+        position: absolute;
+        margin-top: calc(40.74vh + 1.5%);
+        margin-left: calc(5.99vw + 1.5%);
+        height: 2.2em;
+        width: 50.73%;
+        font-size: 8vw;
+    }
+
+    #welcomeSplashLabel {
+        position: absolute;
+        margin-left: 12vw;
+        margin-top: calc(36.15vh - 1em);
+        font-size: 6.5vw;
+    }
+
+    #chatAppLabel {
+        font-size: 9vw;
+    }
+
+    #formBackgroundBox {
+        position: absolute;
+        width: 27.6vw;
+        margin-top: calc((100vh - 23.44vh - 27.6vw)/2);
+        font-size: 5.25vw;
+    }
+
+    #formHeading {
+        font-size: 4.25vw;
+        margin-top: 10.5%;
+    }
+
+    #formBox {
+        font-size: 1.5vw;
+        margin-top: 7.28%;
+        margin-bottom: 10.22%;
+        margin-left: 7.54%;
+        margin-right: 7.54%;
+        padding: 3%;
+    }
+
+    input[type=text], input[type=password] {
+        height: 2vw;
+        width: 89.33%;
+        font-size: 1.3vw;
+    }
+
+
+    #showPasswordContainer {
+        font-size: 1.3vw;
+    }
+    #rememberMeContainer {
+        font-size: 1.3vw;
+    }
+
+    #loginButton {
+        width: 89.33%;
+        height: 13.52%;
+        font-size: 1.5vw;
+    }
+
+    input[type=checkbox] {
+        width: 1.3vw;
+        height: 1.3vw;
+    }
+
+}
