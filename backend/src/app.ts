@@ -53,4 +53,4 @@ await setUpConnectionEvent(io);
 const websocketPort = 7845
 const expressPort = 7846
 expressServer.listen(expressPort, () => logger.info(`Express server listening to http://localhost:${expressPort}`))
-webSocketServer.listen(websocketPort, () => logger.log(`WebSocket listening to http://localhost:${websocketPort}`));
+webSocketServer.listen(websocketPort, () => logger.info(`WebSocket listening to http://localhost:${websocketPort}`));
