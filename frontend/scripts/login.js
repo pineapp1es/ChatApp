@@ -34,7 +34,7 @@ document.getElementById("loginForm").addEventListener('submit', async (e) => {
 
   if (validate.ok) {
     statusLabel.innerHTML = "Successfully logged in!"
-    window.location.href = "./../chat/chat.html";
+    window.location.href = "chat.html";
   }
   else {
     statusLabel.innerHTML = "Wrong Username or Password."

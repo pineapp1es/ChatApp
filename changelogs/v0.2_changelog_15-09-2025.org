@@ -1,0 +1,8 @@
+#+title: Changelog v0.2
+#+date: 15-09-2025
+
+
+- New login page html and css
+- New signup page html and css
+- New chat page html and css (no new features)
+- css works only in firefox (tested only in firefox and vivaldi)(messy but working css)

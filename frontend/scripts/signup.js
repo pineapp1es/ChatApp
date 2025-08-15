@@ -57,7 +57,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     });
 
     if (validate.ok) {
-      window.location.href = "./../chat/chat.html";
+      window.location.href = "chat.html";
     }
   }
   else if (signup.status == 400) {

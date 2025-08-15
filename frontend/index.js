@@ -7,8 +7,8 @@ const autoLogin = await fetch(backendBaseURI + "/cookieLogin", {
   credentials: 'include',
 });
 if (autoLogin.ok) {
-  window.location.href = "./pages/chat/chat.html";
+  window.location.href = "pages/chat.html";
 }
 else {
-  window.location.href = "./pages/login/login.html"
+  window.location.href = "pages/login.html"
 }

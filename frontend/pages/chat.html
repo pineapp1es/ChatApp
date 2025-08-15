@@ -1,40 +1,111 @@
 <!doctype html>
 <html class="no-js" lang="">
     <head>
+
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
-        <title>Simple Chat App</title>
+        <title>Chat on ChatApp!</title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet"  href="./../../style.css">
-        <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-        <!-- Place favicon.ico in the root directory -->
+        <link rel="stylesheet"  href="../styles/chatPage.css">
 
     </head>
     <body>
+        <div class="rootContainer">
+
         <button id='logoutButton'>logout</button>
-        <div class="container">
-            <div id="users">
-                <button class="user">global</button>
-                <button class="user">user1</button>
-                <button class="user">user2</button>
+            <div id="greeting">
+                <label id="greeting">Hello, username!</label>
             </div>
 
-            <div id="chatDiv">
-                <div id="historyDiv">
+            <div class="mainContainer">
+
+                <div id="chatRoomsBackground">
+
+                    <div id="chatRoomsToolbarContainer">
+                        <input id="searchChatRoomsInput" type="text" placeholder="Search...">
+                        <button id="createRoomButton">Create</button>
+                        <button id="joinRoomButton">Join</button>
+                    </div>
+
+                    <div id="chatRoomsContainer">
+
+                        <button class="chatRoomButton">global</button>
+                        <button class="chatRoomButton">user1</button>
+                        <button class="chatRoomButton">user1</button>
+                        <button class="chatRoomButton">user2</button>
+                        <button class="chatRoomButton">user3</button>
+                        <button class="chatRoomButton">user4</button>
+
+                    </div>
+
                 </div>
-                <div id="inputDiv">
-                    <form id="sendMessageForm">
-                        <input id="messageInput">
-                        <button type="submit" id="sendMessageButton">Send</button>
-                    </form>
+
+                <div id="chatContainer">
+
+                    <div id="historyContainer">
+                        <div id="chatTitleBar">
+                            <div id="chatInfoContainer">
+                                <button id="chatInfoButton">?</button>
+                                <div id="chatInfoContent">
+                                    <label id="chatInfoHeading">*Room Info*<br>-------------</label>
+
+                                    <label for="roomCodeInput">code:</label>
+                                    <input type="text" id="roomCodeInput" disabled>
+
+                                    <label for="roomPasswordInput">password:</label>
+                                    <input type="text" id="roomPasswordInput" disabled>
+
+                                    <label for="roomNameInput">name:</label>
+                                    <input type="text" id="roomNameInput" disabled>
+
+                                    <label for="roomCreatedByLabel">created by:</label>
+                                    <label id="roomCreatedByLabel">test</label>
+
+                                    <label for="roomCreatedDateLabel">created date:</label>
+                                    <label id="roomCreatedDateLabel">
+
+                                    <label for="roomOwnerInput">owner:</label>
+                                    <input type="text" id="roomOwnerInput" disabled>
+
+                                    <div id="roomMemberListContainer">
+                                        <label for="roomMembersList">members:</label>
+                                        <input type="text" id="roomMembersList" disabled>
+                                    </div>
+
+                                    <label for="roomMessageCountLabel">message count:</label>
+                                    <label id="roomMessageCountLabel">
+                                </div>
+                            </div>
+                            <label id="chatRoomNameLabel">chatRoomName</label>
+                            <button id="closeChatButton">X</button>
+                        </div>
+                        <div id="chatHistory">
+                            *no chat room selected...*
+                        </div>
+                    </div>
+
+                    <div id="inputContainer">
+
+                        <form id="sendMessageForm">
+
+                            <input id="messageInput">
+
+                            <button type="submit" id="sendMessageButton">-></button>
+
+                        </form>
+
+                    </div>
+
                 </div>
+
             </div>
+
         </div>
 
 
 
 
-        <script type="module" src="chat.js"></script>
+        <script type="module" src="../scripts/chat.js"></script>
     </body>
 </html>

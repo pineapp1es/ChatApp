@@ -4,6 +4,7 @@
   "_version": "20.1.0",
 
   "compilerOptions": {
+    "sourceMap": true,
     "lib": ["es2023"],
     "module": "nodenext",
     "target": "es2022",

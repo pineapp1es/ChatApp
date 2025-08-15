@@ -9,19 +9,6 @@ console.debug = () => {};
 // console.warn = () => {};
 // console.error = () => {};
 
-document.getElementById('logoutButton').addEventListener('click', async (e) => {
-  e.preventDefault();
-
-   const logout = await fetch(backendBaseURI + "/logout", {
-     method : "POST",
-     credentials : 'include',
-     headers: header,
-  }).then(response => response.json());
-
-  socket.disconnect();
-
-  window.location.href = "./../login/login.html";
-})
 
 // Connect to websocket - should be done while logging in
 const port = 7845;
@@ -32,13 +19,13 @@ const socket = io(`http://localhost:${port}`, {
 console.debug("Connected!");
 
 socket.on('noSession', (data) => {
-  window.location.href = "./../login/login.html";
+  window.location.href = "./../pages/login.html";
 });
 
 // Object to store all the chat histories for the chat rooms visited by the user.
 let chatHistories = {};
 
-const historyDiv = document.getElementById('historyDiv');
+const historyDiv = document.getElementById('chatHistory');
 const chatRoomDiv = document.getElementById('chatRoomDiv');
 const sendMessageForm = document.getElementById('sendMessageForm');
 const messageInput = document.getElementById('messageInput');
@@ -54,11 +41,12 @@ sendMessageForm.addEventListener('submit', (e) => {
 });
 
 
-// Updates chatHistories object when server sends in update request
-socket.on("updateChat", (data) => updateHistoryData(data));
+document.getElementById('logoutButton').addEventListener('click', async (e) => {
+  await logout();
+  e.preventDefault();
+})
 
 
-// Function that handles sending the message from client to server
 function sendMessage() {
 
    // let chatRoom = selectedChatRoom
@@ -73,9 +61,27 @@ function sendMessage() {
 
   console.log("Sending Message...")
   socket.emit('sendMessage', data);
+  messageInput.value = "";
   // Set the history to be scrolled to the bottom when message sends
   historyDiv.scrollTop = historyDiv.scrollHeight - historyDiv.clientHeight;
 }
+
+async function logout () {
+   const logout = await fetch(backendBaseURI + "/logout", {
+     method : "POST",
+     credentials : 'include',
+     headers: header,
+  });
+
+  socket.disconnect();
+
+  window.location.href = "../pages/login.html";
+}
+
+// Updates chatHistories object when server sends in update request
+socket.on("updateChat", (data) => updateHistoryData(data));
+
+
 
 
 // Function that handles updating the chatHistories object
@@ -109,6 +115,8 @@ function updateChat() {
   if (lastUpdatedMessageNum < chatHistories[roomCode]['msgStartNum'])
      lastUpdatedMessageNum = chatHistories[roomCode]['msgStartNum'] - 1;
 
+  if (!chatHistories[roomCode] || Object.keys(chatHistories[roomCode]).length === 0)
+    historyDiv.innerHTML = "";
   const lastMessageInHistoryNum = chatHistories[roomCode]['msgEndNum'];
   for (let i = lastUpdatedMessageNum + 1; i <= lastMessageInHistoryNum; i++) {
     historyDiv.innerHTML = historyDiv.innerHTML + chatHistories[roomCode][i.toString()] + "<br>";

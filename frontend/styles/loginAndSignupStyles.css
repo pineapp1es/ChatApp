@@ -15,10 +15,19 @@
     src: url(../fonts/unifont-16.0.04.otf);
 }
 
+:root {
+    --main-bg-color: #FFFDEA;
+    --accent-text-color: #6C4B04;
+    --heading-box-color: #96E8FF;
+    --heading-box-shadow-color: #85CEE2;
+    --foreground-container-color: #EAE7D8;
+}
+
 body {
     background-color: #FFFDEA;
     color: #6C4B04;
-    font-family: JetBrains Mono-Medium;
+    /* font-family: JetBrains Mono-Medium; */
+    font-family: Unifont;
 }
 
 .container {
@@ -43,15 +52,14 @@ body {
     z-index: 2;
     align-items: center;
     text-align: center;
-}
-
-.headingBox-shadow {
-    background-color: #85CEE2;
-    z-index: 1;
+    box-shadow: 2vw 2vw #85CEE2;
+    border: 5px outset black;
 }
 
 #welcomeSplashLabel {
-    font-family: JetBrains Mono-Medium-Italic;
+    font-family: Unifont;
+    font-weight: bold;
+    font-style: italic;
 }
 
 #chatAppLabel {
@@ -64,7 +72,7 @@ body {
     align-items: center;
     display: flex;
     flex-direction: column;
-    border-radius: 8px;
+    border: 4px inset white;
 }
 
 #formHeading {
@@ -77,7 +85,7 @@ body {
     background-color: #FFFDEA;
     align-items: center;
     font-family: Unifont;
-    border-radius: 8px;
+    border: 4px outset white;
 }
 
 input[type=text], input[type=password] {
@@ -127,16 +135,17 @@ input[type=text], input[type=password] {
     margin-left: 5.33%;
     padding: 2%;
     align-self: center;
-    color: white;
-    background-color: black;
+    color: black;
+    background-color: var(--foreground-container-color);
     margin-bottom: 0.7em;
     transition-duration: 0.2s;
-    border-radius: 8px;
+    border: 4px outset white;
 }
 #loginButton:hover {
-    color: #85CEE2;
+    /* color: #85CEE2; */
     transition-duration: 0.2s;
-    background-color: #2A2A2A;
+    /* background-color: #2A2A2A; */
+    background-color: white;
 }
 
 #signUpOrLogInSuggestion {
@@ -174,18 +183,11 @@ input[type=text], input[type=password] {
         font-size: 10vw;
     }
 
-    .headingBox-shadow {
-        position: absolute;
-        margin-top: calc(0vh + 1.5%);
-        margin-left: calc((100vw - 75vw)/2 + 1.5%);
-        height: 2.2em;
-        width: 75vw;
-        font-size: 10vw;
-    }
-
     #welcomeSplashLabel {
-        margin-left: 23vw;
+        display: block;
+        margin-left: 26.5vw;
         font-size: 9.5vw;
+        margin-bottom: 2vh;
     }
 
     #chatAppLabel {
@@ -272,19 +274,10 @@ input[type=text], input[type=password] {
         font-size: 8vw;
     }
 
-    .headingBox-shadow {
-        position: absolute;
-        margin-top: calc(40.74vh + 1.5%);
-        margin-left: calc(5.99vw + 1.5%);
-        height: 2.2em;
-        width: 50.73%;
-        font-size: 8vw;
-    }
-
     #welcomeSplashLabel {
         position: absolute;
-        margin-left: 12vw;
-        margin-top: calc(36.15vh - 1em);
+        margin-left: 15.5vw;
+        margin-top: calc(36.15vh - 5.5vw);
         font-size: 6.5vw;
     }
 

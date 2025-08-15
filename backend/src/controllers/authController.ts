@@ -53,8 +53,10 @@ export const signupUser = async (req: Request, res: Response) => {
 
 export const logoutUser = async (req: Request, res: Response) => {
   logger.debug("Recieved Logout Request.")
-  if (!req.cookies) sendResponseWithStatus(res, RESPONSE_CODES.BAD_REQUEST)
-  if (!req.cookies.sessionID) sendResponseWithStatus(res, RESPONSE_CODES.BAD_REQUEST)
+  if (!req.cookies || !req.cookies.sessionID) {
+    sendResponseWithStatus(res, RESPONSE_CODES.BAD_REQUEST)
+    return;
+  }
 
   await logoutService(req.cookies.sessionID);
 
