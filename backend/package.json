@@ -6,7 +6,6 @@
         "@types/express": "^5.0.3",
         "@types/module-alias": "^2.0.4",
         "@types/node": "^24.2.0",
-        "bcrypt": "^6.0.0",
         "bcrypt-ts": "^7.1.0",
         "cookie": "^1.0.2",
         "cookie-parser": "^1.4.7",
