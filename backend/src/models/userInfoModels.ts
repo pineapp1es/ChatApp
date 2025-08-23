@@ -49,3 +49,11 @@ export const createNewUserData = async (username: string, hashedPassword: string
     isMemberOfRooms: ['global']
   }).catch(err => handleError(err, `Creating New User Data: Username: ${username}, Password(Hashed): ${hashedPassword}`));
 }
+
+export const addRoomToUserRoomList = async (roomCode: string, username: string) => {
+  return await UserInfo.updateOne({ username: username }, {
+    $push: {
+      isMemberOfRooms: roomCode
+    }
+  }).exec();
+}

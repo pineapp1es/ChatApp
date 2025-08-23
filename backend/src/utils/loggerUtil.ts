@@ -20,22 +20,22 @@ const loggerClass = class loggerClass {
             console.debug("[DEBUG] " + message);
     };
 
-    log (message: string) {
+    log (...message: Array<string>) {
        if (this.#level >= loggingLevels.INFO)
            console.log("[INFO] " + message);
     };
 
-    info (message: string) {
+    info (...message: Array<string>) {
        if (this.#level >= loggingLevels.INFO)
            console.log("[INFO] " + message);
     };
 
-    warn (message: string) {
+    warn (...message: Array<string>) {
        if (this.#level >= loggingLevels.WARN)
            console.log("[WARN] " + message);
     };
 
-    error (message: string) {
+    error (...message: Array<string>) {
        if (this.#level >= loggingLevels.ERROR)
            console.log("[ERROR] " + message);
     };

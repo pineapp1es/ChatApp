@@ -42,10 +42,10 @@ export const createSessionCookieData = (rememberSession: Boolean) => {
 
 
 export const checkIfPasswordIsCorrect = async (submittedPassword: string, correctHashedPassword: string) => {
-  return await bcrypt.compare(submittedPassword, correctHashedPassword).catch(err => handleError(err, 'bcrypt Compare Passwords'))
+  return await bcrypt.compare(submittedPassword, correctHashedPassword).catch(err => { throw(err) })
 }
 
 
 export const hashPassword = async (password: string) => {
-  return await bcrypt.hash(password, bcryptSaltRounds).catch(err => handleError(err, 'Hashing password'));
+  return await bcrypt.hash(password, bcryptSaltRounds).catch(err => { throw(err) });
 }

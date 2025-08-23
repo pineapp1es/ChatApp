@@ -134,3 +134,25 @@ export const getRoomChatHistorySlice = async (roomCode: string, start: number, e
   }).exec()
     .catch(err => handleError(err, `Getting message history from chat room with code: ${roomCode}`));
 }
+
+export const createNewEmptyChatRoom = async (
+  roomCode: string,
+  password: string,
+  name: string,
+  createdBy: string,
+  createdDate: Date,
+) => {
+  return await ChatRoom.create({
+    code: roomCode,
+    password: password,
+    name: name,
+    createdBy: createdBy,
+    createdDate: createdDate,
+    owner: createdBy,
+    members: [],
+    messageData: {
+      messageCount: 0,
+      history: []
+    }
+  })
+}
