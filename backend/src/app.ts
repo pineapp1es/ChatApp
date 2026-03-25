@@ -21,7 +21,8 @@ const webSocketServer = createServer(expressServer)
 const io = new socketIO.Server(webSocketServer, {
   cookie: true,
   cors: {
-    origin: ["http://localhost:5173"],
+    // origin: ["http://localhost:5173"],
+    origin: 'https://pineapp1es.github.io/ChatApp/',
     credentials: true,
   }
 });
