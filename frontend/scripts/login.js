@@ -14,6 +14,7 @@ showPasswordCheck.addEventListener('change', () => {
 
 
 document.getElementById("loginForm").addEventListener('submit', async (e) => {
+  console.log(e);
   e.preventDefault();
 
   const username = document.getElementById('usernameInput').value;

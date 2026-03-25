@@ -24,7 +24,7 @@ export const addMessageToDB = async (messageData: any, username: string, io: Ser
     await updateMessagesInClient({
         roomCode: messageData.roomToSendTo,
         numberOfMessagesToSkipFromEnd: 0,
-        numberOfMessagesToLoad: 100
+        numberOfMessagesToLoad: 50
     }, null, io);
 }
 

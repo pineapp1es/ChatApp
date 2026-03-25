@@ -15,7 +15,10 @@ export const initClientConnectionToServer = async (socket: Socket, io: Server) =
         return;
     }
 
-    await addSocketToRooms(socket, sessionID);
+    const rooms = await addSocketToRooms(socket, sessionID);
+    socket.emit('chatRoomsData', {
+        rooms: rooms,
+    })
 
     const socketSessionData = await getSessionDataFromID(sessionID);
     if (!socketSessionData) {

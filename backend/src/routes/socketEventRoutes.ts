@@ -18,7 +18,7 @@ export const setUpSocketChatRoomEvents = (socket: Socket, username: string) => {
     logger.debug("Setting socket chat room events..");
     // TODO
     socket.on("createRoom", async(data) => await createChatRoom(data, username));
-    socket.on("joinRoom"), async(data) => await joinChatRoom(data, username));
+    // socket.on("joinRoom"), async(data) => await joinChatRoom(data, username));
     // socket.on("leaveRoom", async(data) => await leaveChatRoom(data, username));
     // socket.on("deleteRoom", async(data) => await deleteChatRoom(data, username));
     logger.debug("Done!")

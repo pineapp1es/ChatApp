@@ -1,4 +1,4 @@
-import { createNewEmptyChatRoom } from "@models/chatRoomsModels.ts";
+import { createNewEmptyChatRoom, getOneFieldDataInRoom } from "@models/chatRoomsModels.ts";
 import { addRoomToUserRoomList } from "@models/userInfoModels.ts"
 import { handleError } from "@utils/handlerUtils.ts";
 import { logger } from "@utils/loggerUtil.ts";
@@ -21,7 +21,7 @@ export const createRoomService = async (roomData: any, username: string) => {
 
     logger.debug(`Room (code:${roomCode}) was created! Adding creator to the room...`);
 
-    await addRoomToUserRoomList(roomCode, username).catch(err => {
+    await addRoomToUserRoomList(roomCode, roomName, username).catch(err => {
         throw("Adding username: " + username + `to room (roomcode:${roomCode}` + "\n ERROR: " + err);
     })
 
@@ -35,7 +35,7 @@ export const joinRoomService = async (roomData: any, username: string) => {
 
     logger.debug(`user (username:${username}) is attempting to join room (roomcode:${roomCode})`);
 
-    const actualHashedPass = await getChatRoomHashedPassword(roomCode);
+    const actualHashedPass = await getOneFieldDataInRoom(roomCode, "password");
 
     const wasSubmittedPasswordCorrect = await checkIfPasswordIsCorrect(roomPass, actualHashedPass);
 
@@ -44,7 +44,9 @@ export const joinRoomService = async (roomData: any, username: string) => {
         return "incorrect";
     }
 
-    await addRoomToUserRoomList(roomCode, username).catch(err => {
+    const roomName = await getOneFieldDataInRoom(roomCode, "name");
+
+    await addRoomToUserRoomList(roomCode, roomName, username).catch(err => {
         throw("Adding username: " + username + `to room (roomcode:${roomCode}` + "\n ERROR: " + err);
     })
 

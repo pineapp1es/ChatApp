@@ -13,7 +13,7 @@ const header = { "content-type": "application/json" }
 // Connect to websocket - should be done while logging in
 const port = 7845;
 console.debug("Connecting to web socket...");
-const socket = io(`http://localhost:${port}`, {
+export const socket = io(`http://localhost:${port}`, {
     withCredentials: true
 });
 console.debug("Connected!");
@@ -29,9 +29,13 @@ const historyDiv = document.getElementById('chatHistory');
 const chatRoomDiv = document.getElementById('chatRoomDiv');
 const sendMessageForm = document.getElementById('sendMessageForm');
 const messageInput = document.getElementById('messageInput');
+const chatRoomsContainer = document.getElementById('chatRoomsContainer')
+const selectedChatRoom = 'global';
+
 
 
 let lastUpdatedMessageNum = 0;
+
 
 
 // Event listener for the submit button that sends the message to server
@@ -47,11 +51,14 @@ document.getElementById('logoutButton').addEventListener('click', async (e) => {
 })
 
 
+function switchRoom(room) {
+    selectedChatRoom = room;
+}
+
 function sendMessage() {
 
-    // let chatRoom = selectedChatRoom
-    let chatRoom = "global";
-    let message = messageInput.value;
+    const chatRoom = selectedChatRoom
+    const message = messageInput.value;
 
     let data = {
         roomToSendTo: chatRoom,
@@ -109,8 +116,7 @@ function updateChat() {
     const isScrolledToBottom = historyDiv.scrollHeight - historyDiv.clientHeight
         == historyDiv.scrollTop;
 
-    // const roomCode = selectedChatRoom;
-    const roomCode = "global";
+    const roomCode = selectedChatRoom;
 
     if (lastUpdatedMessageNum < chatHistories[roomCode]['msgStartNum'])
         lastUpdatedMessageNum = chatHistories[roomCode]['msgStartNum'];

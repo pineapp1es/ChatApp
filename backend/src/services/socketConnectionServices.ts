@@ -47,9 +47,11 @@ export const addSocketToRooms = async (socket: Socket, sessionID: string) => {
     }
 
     for (let room of roomsToAddSocketTo) {
-        logger.debug(`Adding ${username} to room with code: ${room}`);
-        socket.join(room)
+        logger.debug(`Adding ${username} to room with code: ${room.code}`);
+        socket.join(room.code)
     }
+
     logger.debug("Done!")
+    return roomsToAddSocketTo;
 }
 
