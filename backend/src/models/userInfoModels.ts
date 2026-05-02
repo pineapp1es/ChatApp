@@ -60,7 +60,7 @@ export const createNewUserData = async (username: string, hashedPassword: string
     return await UserInfo.create({
         username: username,
         password: hashedPassword,
-        isMemberOfRooms: ['global']
+        isMemberOfRooms: [{code: 'global', name: 'global'}]
     }).catch(err => handleError(err, `Creating New User Data: Username: ${username}, Password(Hashed): ${hashedPassword}`));
 }
 

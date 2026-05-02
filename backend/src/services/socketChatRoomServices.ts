@@ -3,10 +3,11 @@ import { addRoomToUserRoomList } from "@models/userInfoModels.ts"
 import { handleError } from "@utils/handlerUtils.ts";
 import { logger } from "@utils/loggerUtil.ts";
 import { checkIfPasswordIsCorrect } from "../utils/securityUtils.ts";
+import { newChatRoomType } from "../types/chatRoomTypes.ts"
 
-export const createRoomService = async (roomData: any, username: string) => {
+export const createRoomService = async (roomData: newChatRoomType, username: string) => {
     const roomCode = roomData.code;
-    const roomName = roomData.roomName;
+    const roomName = roomData.name;
     const roomPass = (!roomData.password) ? "" : roomData.password;
     const roomCreatedBy = username;
     const roomCreatedDate = new Date()

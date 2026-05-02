@@ -36,7 +36,7 @@ document.getElementById('signupForm').addEventListener('submit', async (e) => {
     const payload = {
         username: username,
         password: password,
-        rememberMe: false
+        rememberSession: false
     }
 
     const signup = await fetch(backendBaseURI + "/signup", {

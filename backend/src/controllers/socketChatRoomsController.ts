@@ -1,8 +1,9 @@
 import { logger } from "@utils/loggerUtil.ts"
 import { createRoomService, joinRoomService } from "../services/socketChatRoomServices.ts";
 import { handleError } from "../utils/handlerUtils.ts";
+import { newChatRoom, joinChatRoom } from "../types/chatRoomTypes.ts"
 
-export const createChatRoom = async (data: any, username: string) => {
+export const createChatRoom = async (data: newChatRoom, username: string) => {
 
     logger.debug("Recieved request to create room");
 
@@ -19,7 +20,7 @@ export const createChatRoom = async (data: any, username: string) => {
     logger.debug("Finished room creation request!\n");
 }
 
-export const joinChatRoom = async (data: any, username: string) => {
+export const joinChatRoom = async (data: joinChatRoom, username: string) => {
 
     logger.debug("Recieved request to join room");
 

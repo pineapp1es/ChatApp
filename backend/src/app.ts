@@ -21,7 +21,7 @@ const webSocketServer = createServer(expressServer)
 const io = new socketIO.Server(webSocketServer, {
     cookie: true,
     cors: {
-        origin: ["http://localhost:5174", 'https://pineapp1es.github.io/ChatApp/'],
+        origin: ["http://localhost:5173", 'https://pineapp1es.github.io/ChatApp/'],
         credentials: true,
     }
 });
@@ -31,7 +31,7 @@ const io = new socketIO.Server(webSocketServer, {
 logger.debug("Setting up middleware for Express Server...")
 expressServer.use(cookieParser());
 expressServer.use(cors({
-    origin: ["http://localhost:5174", "https://pineapp1es.github.io"],
+    origin: ["http://localhost:5173", "https://pineapp1es.github.io"],
     // origin: 'https://pineapp1es.github.io/ChatApp/',
     credentials: true
 }));
