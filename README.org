@@ -1,0 +1,19 @@
+#+title: ChatApp !!
+
+Web App for messaging
+
+* Current features
+- Signup/Login
+- Persistent chat
+- Global chat room only
+
+* Todo
+** chatapp
+- [75%] creation of private rooms
+- [0%] dashboard for user with stats?
+- [0%] play games in a chat room
+
+* Tech used
+- Nodejs
+- Expressjs
+- MongoDB (connected through mongoose)
