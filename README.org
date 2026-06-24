@@ -13,7 +13,12 @@ Web App for messaging
 - [0%] dashboard for user with stats?
 - [0%] play games in a chat room
 
+* Screenshots wow so cool 
+[[file:loginpage.png]]
+[[file:chatpage.png]]
+
 * Tech used
 - Nodejs
 - Expressjs
 - MongoDB (connected through mongoose)
+
