@@ -1,4 +1,4 @@
-import { createNewEmptyChatRoom, getOneFieldDataInRoom } from "@models/chatRoomsModels.ts";
+import { createNewEmptyChatRoom, getOneFieldDataInRoom, addUserToRoomMemberList } from "@models/chatRoomsModels.ts";
 import { addRoomToUserRoomList } from "@models/userInfoModels.ts"
 import { handleError } from "@utils/handlerUtils.ts";
 import { logger } from "@utils/loggerUtil.ts";
@@ -25,6 +25,7 @@ export const createRoomService = async (roomData: newChatRoomType, username: str
     await addRoomToUserRoomList(roomCode, roomName, username).catch(err => {
         throw("Adding username: " + username + `to room (roomcode:${roomCode}` + "\n ERROR: " + err);
     })
+    await addUserToRoomMemberList(roomCode, username)
 
     logger.debug(`user (username:${username}) was added to room (roomcode:${roomCode})!`);
 }
@@ -50,6 +51,8 @@ export const joinRoomService = async (roomData: any, username: string) => {
     await addRoomToUserRoomList(roomCode, roomName, username).catch(err => {
         throw("Adding username: " + username + `to room (roomcode:${roomCode}` + "\n ERROR: " + err);
     })
+
+    await addUserToRoomMemberList(roomCode, username)
 
     logger.debug(`user (username:${username}) was added to room (roomcode:${roomCode})!`);
 }

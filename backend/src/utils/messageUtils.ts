@@ -46,7 +46,7 @@ export const parseMessageHistoryToClientFormat = (messageHistory: Array<any>) =>
 
         const msgFormattedStringHTML = `[${formattedDateString}][${formattedTimeString}][${currMessageData.sender}]:<br>`
             + content;
-        formattedMessageHistory[currMessageData.messageNumber.toString()] = msgFormattedStringHTML;
+        formattedMessageHistory[currMessageData.messageNumber] = msgFormattedStringHTML;
     }
 
     logger.debug("Done!")

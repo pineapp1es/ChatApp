@@ -2,7 +2,7 @@ import { Server, Socket } from 'socket.io';
 import { initClientConnectionToServer } from '@controllers/socketConnectionController.ts'
 import { addMessageToDB, updateMessagesInClient } from '@controllers/socketMessagesController.ts';
 import { logger } from '../utils/loggerUtil.ts';
-import { createChatRoom } from '../controllers/socketChatRoomsController.ts';
+import { createChatRoom, joinChatRoom } from '../controllers/socketChatRoomsController.ts';
 
 
 export const setUpConnectionEvent = async (io: Server) => io.on('connection', (socket) => initClientConnectionToServer(socket, io));
@@ -16,9 +16,9 @@ export const setUpSocketMessageEvents = (socket: Socket, username: string, io: S
 
 export const setUpSocketChatRoomEvents = (socket: Socket, username: string) => {
     logger.debug("Setting socket chat room events..");
-    // TODO
     socket.on("createRoom", async(data) => await createChatRoom(data, username));
-    // socket.on("joinRoom"), async(data) => await joinChatRoom(data, username));
+    socket.on("joinRoom", async(data) => await joinChatRoom(data, username));
+    // TODO
     // socket.on("leaveRoom", async(data) => await leaveChatRoom(data, username));
     // socket.on("deleteRoom", async(data) => await deleteChatRoom(data, username));
     logger.debug("Done!")

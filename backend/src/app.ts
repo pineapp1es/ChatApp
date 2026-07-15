@@ -4,6 +4,7 @@ import { createServer } from 'node:http';
 import cors from 'cors';
 import cookieParser from 'cookie-parser';
 import { logger, loggingLevels } from '@utils/loggerUtil.ts';
+import { createChatRoom } from '@controllers/socketChatRoomsController.ts';
 
 
 // Set log level
@@ -55,3 +56,11 @@ const websocketPort = 7845
 const expressPort = 7846
 expressServer.listen(expressPort, () => logger.info(`Express server listening to http://localhost:${expressPort}`))
 webSocketServer.listen(websocketPort, () => logger.info(`WebSocket listening to http://localhost:${websocketPort}`));
+
+// create global room if doesnt exist already
+createChatRoom( {
+    code: "global",
+    name: "global",
+    password: undefined
+}, "owner" )
+

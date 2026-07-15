@@ -30,8 +30,7 @@ const chatRoomDiv = document.getElementById('chatRoomDiv');
 const sendMessageForm = document.getElementById('sendMessageForm');
 const messageInput = document.getElementById('messageInput');
 const chatRoomsContainer = document.getElementById('chatRoomsContainer')
-const selectedChatRoom = 'global';
-
+let selectedChatRoom = 'global';
 
 
 let lastUpdatedMessageNum = 0;
@@ -51,8 +50,14 @@ document.getElementById('logoutButton').addEventListener('click', async (e) => {
 })
 
 
-function switchRoom(room) {
+export function switchRoom(room) {
+    console.log(room)
     selectedChatRoom = room;
+    socket.emit("loadMessages", {
+	roomCode: room,
+	numberOfMessagesToSkipFromEnd: 0,
+	numberOfMessagesToLoad: 50
+    })
 }
 
 function sendMessage() {
@@ -89,8 +94,6 @@ async function logout() {
 socket.on("updateChat", (data) => updateHistoryData(data));
 
 
-
-
 // Function that handles updating the chatHistories object
 function updateHistoryData(data) {
     console.debug("Recieved update request. Updating chat history data...");
@@ -125,7 +128,7 @@ function updateChat() {
         historyDiv.innerHTML = "";
     const lastMessageInHistoryNum = chatHistories[roomCode]['msgEndNum'];
     for (let i = lastUpdatedMessageNum + 1; i <= lastMessageInHistoryNum; i++) {
-        historyDiv.innerHTML = historyDiv.innerHTML + "<div>" + chatHistories[roomCode][i.toString()] + "<div>";
+        historyDiv.innerHTML = historyDiv.innerHTML + "<div>" + chatHistories[roomCode][i] + "<div>";
     }
 
     if (isScrolledToBottom)

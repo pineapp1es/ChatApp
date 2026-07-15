@@ -156,3 +156,13 @@ export const createNewEmptyChatRoom = async (
         }
     })
 }
+
+export const addUserToRoomMemberList = async (roomToAddTo: string, username: string) => {
+    return await ChatRoom.updateOne({ code: roomToAddTo }, {
+        $push: {
+            "members": username
+        }
+    }).exec()
+        .catch(err => handleError(err, `Adding message to room: ${roomToAddTo}, message: ${JSON.stringify(messageToAdd)}`));
+
+}
