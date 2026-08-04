@@ -24,6 +24,8 @@ socket.on('noSession', (data) => {
 
 // Object to store all the chat histories for the chat rooms visited by the user.
 let chatHistories = {};
+// obj to store room info (pass, owner, creation date, etc.)
+export let chatRoomsInfo = {};
 
 const historyDiv = document.getElementById('chatHistory');
 const chatRoomDiv = document.getElementById('chatRoomDiv');
@@ -31,7 +33,7 @@ const sendMessageForm = document.getElementById('sendMessageForm');
 const messageInput = document.getElementById('messageInput');
 const chatRoomsContainer = document.getElementById('chatRoomsContainer')
 let selectedChatRoom = 'global';
-
+chatRoomNameLabel.innerHTML = "test"
 
 let lastUpdatedMessageNum = 0;
 
@@ -58,6 +60,12 @@ export function switchRoom(room) {
 	numberOfMessagesToSkipFromEnd: 0,
 	numberOfMessagesToLoad: 50
     })
+    chatRoomNameLabel.innerHTML = selectedChatRoom
+    InfoCode.innerHTML = `code: ${chatRoomsInfo[room].code}`
+    InfoPassword.innerHTML = `password: ${chatRoomsInfo[room].password}`
+    InfoName.innerHTML = `name: ${chatRoomsInfo[room].name}`
+    InfoCreatedBy.innerHTML = `created by: ${chatRoomsInfo[room].createdBy}`
+    InfoCreatedDate.innerHTML = `created date: ${chatRoomsInfo[room].createdDate}`
 }
 
 function sendMessage() {

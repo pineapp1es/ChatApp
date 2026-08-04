@@ -4,6 +4,7 @@ import { handleError } from "@utils/handlerUtils.ts";
 import { logger } from '@utils/loggerUtil.ts';
 import { Socket } from "socket.io";
 import { getUserData } from "@models/userInfoModels.ts";
+import { getChatRoomMetadata } from "../models/chatRoomsModels.ts";
 
 
 export const socketHasValidSessionID = async (socketCookies: string | undefined) => {
@@ -40,18 +41,31 @@ export const addSocketToRooms = async (socket: Socket, sessionID: string) => {
         return;
     }
 
-    const roomsToAddSocketTo = userData?.isMemberOfRooms;
+    const roomsToAddSocketTo= userData?.isMemberOfRooms;
+    const rooms = [];
     if (!roomsToAddSocketTo) {
         logger.debug("No rooms found to add.")
         return;
     }
 
     for (let room of roomsToAddSocketTo) {
+        logger.debug(`Getting room info (${room.code})`);
+        const roomMeta = await getChatRoomMetadata(room.code);
+        rooms.push(
+            {
+                code: roomMeta?.code,
+                password: roomMeta?.password,
+                name: roomMeta?.name,
+                createdBy: roomMeta?.createdBy,
+                createdDate: roomMeta?.createdDate,
+            }
+        )
+
         logger.debug(`Adding ${username} to room with code: ${room.code}`);
         socket.join(room.code)
     }
 
     logger.debug("Done!")
-    return roomsToAddSocketTo;
+    return rooms;
 }
 

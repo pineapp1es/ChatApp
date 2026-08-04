@@ -114,10 +114,18 @@ export const getOneFieldDataInRoom = async (roomCode: string, projection: object
         .catch(err => handleError(err, `Getting field: ${projection} from chat room with code: ${roomCode}`));
 }
 
-export const getChatRoomData = async (roomCode: string) => {
+export const getFullChatRoomData = async (roomCode: string) => {
     return await ChatRoom.findOne({
         code: roomCode
     }).exec()
+        .catch(err => handleError(err, `Getting data for room with code: ${roomCode}`));
+}
+
+export const getChatRoomMetadata = async (roomCode: string) => {
+    return await ChatRoom.findOne(
+        { code: roomCode },
+        "code password name createdBy createdDate owner"
+    ).exec()
         .catch(err => handleError(err, `Getting data for room with code: ${roomCode}`));
 }
 
